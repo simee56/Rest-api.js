@@ -5,7 +5,9 @@ const fs = require('fs');
 const app = express();
 const PORT = 8000;
 
+
 //  MIDDLEWARE
+app.use(express.json());
 app.use(express.urlencoded({extended :false}));
 
 //GET METHOD 
@@ -21,7 +23,17 @@ app.get('/api/usersData/:id', (req, res) => {
     return res.json(userData);
 })
 
+
+//POST METHOd
+app.post('/api/usersData', (req, res) =>{
+    const body = req.body;
+    usersData.push({...body, id : usersData.length + 1});
+    fs.writeFile('./MOCK_DATA.json', JSON.stringify(usersData), (err,data) =>{
+        return res.json({status : "success"});
+    })
+})
+
+
 app.listen(PORT, () => {
     console.log("THE SERVER HAS STARTED AT THE PORT", PORT);
-})  
-
+})
