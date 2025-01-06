@@ -1,0 +1,15 @@
+{
+  "dependencies": {
+    "express": "^4.21.2"
+  },
+  "name": "rest-api",
+  "version": "1.0.0",
+  "description": "REST-API",
+  "main": "index.js",
+  "devDependencies": {},
+  "scripts": {
+    "start": "node index.js"
+  },
+  "author": "",
+  "license": "ISC"
+}
