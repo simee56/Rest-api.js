@@ -6,9 +6,10 @@ const app = express();
 const PORT = 8000;
 
 
-//  MIDDLEWARE
+//  MIDDLEWARE to connect POSTMAN
 app.use(express.json());
 app.use(express.urlencoded({ extended: false }));
+
 
 //GET METHOD 
 app.get('/api/usersData', (req, res) => {
@@ -16,7 +17,7 @@ app.get('/api/usersData', (req, res) => {
 })
 
 
-//GET METHOD for finding user
+//GET METHOD for the finding user
 app.get('/api/usersData/:id', (req, res) => {
     const userId = Number(req.params.id);
     const userData = usersData.find((userData) => userData.id === userId);
@@ -42,10 +43,12 @@ app.post('/api/usersData', (req, res) => {
 app.patch('/api/usersData/:id', (req, res) => {
     const userId = Number(req.params.id);
     const userData = usersData.find((userData) => userData.id === userId);
+
     // Check if the user exists
     if (!userData) {
         return res.status(404).json({ status: "error", message: "User not found" });
     }
+
     // Update the user with new data
     Object.assign(userData, req.body);
 
@@ -62,12 +65,15 @@ app.patch('/api/usersData/:id', (req, res) => {
 app.delete('/api/usersData/:id', (req, res) => {
     const userId = Number(req.params.id);
     const userData = usersData.findIndex((userData) => userData.id === userId);
-      // Check if the user exists
-      if (!userData) {
+
+    // Check if the user exists
+    if (!userData) {
         return res.status(404).json({ status: "error", message: "User not found" });
     }
-        // Remove the user from the array
-        const deletedUser = usersData.splice(userData, 1)[0];
+
+    // Remove the user from the array
+    const deletedUser = usersData.splice(userData, 1)[0];
+
     fs.writeFile('./MOCK_DATA.json', JSON.stringify(usersData), (err, data) => {
         if (err) {
             return res.status(500).json({ status: "Error", message: "Error detected", err })
