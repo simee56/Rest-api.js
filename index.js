@@ -7,13 +7,13 @@ const PORT = 8000;
 
 
 //  MIDDLEWARE to connect POSTMAN
-app.use(express.json());
+// app.use(express.json());
 app.use(express.urlencoded({ extended: false }));
 
 //Creating our own middleware
 app.use((req, res, next) => {
     fs.appendFile('log.txt', `\n${Date.now()}: ${req.ip}: ${req.method}: ${req.path}`, (err, data) => {
-        if(err){
+        if (err) {
             return res.end("Error", err)
         };
         next();
@@ -42,10 +42,17 @@ app.get('/api/usersData/:id', (req, res) => {
 //POST METHOd
 app.post('/api/usersData', (req, res) => {
     const body = req.body;
+    if (!body || !body.first_name || !body.last_name || !body.email || !body.gender || !body.job_title) {
+        return res.status(400).json({ message: "All fields are required" });
+    }
     usersData.push({ ...body, id: usersData.length + 1 });
+
     fs.writeFile('./MOCK_DATA.json', JSON.stringify(usersData), (err, data) => {
-        return res.json({ status: "success" });
-    })
+        if (err) {
+            return res.status(500).json({ status: "Error", message: "Error detected", err })
+        }
+        return res.status(201).json({ status: "success", data: usersData });
+    });
 })
 
 
