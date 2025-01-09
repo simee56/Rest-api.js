@@ -10,6 +10,16 @@ const PORT = 8000;
 app.use(express.json());
 app.use(express.urlencoded({ extended: false }));
 
+//Creating our own middleware
+app.use((req, res, next) => {
+    fs.appendFile('log.txt', `\n${Date.now()}: ${req.ip}: ${req.method}: ${req.path}`, (err, data) => {
+        if(err){
+            return res.end("Error", err)
+        };
+        next();
+    });
+})
+
 
 //GET METHOD 
 app.get('/api/usersData', (req, res) => {
